@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react';
 import { api } from '../services/api';
+import Link from 'next/link';
 
 // Tipagem básica para o TypeScript
 interface Restaurant {
@@ -12,10 +13,10 @@ interface Restaurant {
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [name, setName] = useState<string>('');
-  const [whatsapp, setWhatsapp] = useState<string>('');
+  const [name, setName] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
 
-  //ID DO USUÁRIO NO PRISMA 
+  // COLE AQUI O ID DO USUÁRIO QUE VOCÊ CRIOU NO PRISMA STUDIO
   const MOCK_OWNER_ID = "123"; 
 
   // Busca os restaurantes ao carregar a página
@@ -23,7 +24,6 @@ export default function Home() {
     loadRestaurants();
   }, []);
 
-  // Função para buscar os restaurantes no backend
   async function loadRestaurants() {
     try {
       const response = await api.get('/restaurants');
@@ -94,12 +94,20 @@ export default function Home() {
             <p className="text-gray-500">Nenhum restaurante cadastrado ainda.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {restaurants.map((restaurant) => (
-                <div key={restaurant.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                  <h3 className="font-bold text-lg">{restaurant.name}</h3>
-                  <p className="text-gray-600 text-sm mt-1">WhatsApp: {restaurant.whatsapp}</p>
-                </div>
-              ))}
+             {restaurants.map((restaurant) => (
+  <div key={restaurant.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex flex-col justify-between">
+    <div>
+      <h3 className="font-bold text-lg">{restaurant.name}</h3>
+      <p className="text-gray-600 text-sm mt-1">WhatsApp: {restaurant.whatsapp}</p>
+    </div>
+    <Link 
+      href={`/restaurant/${restaurant.id}`}
+      className="mt-4 bg-gray-100 hover:bg-gray-200 text-center text-gray-800 font-semibold py-2 rounded-md transition-colors"
+    >
+      Gerenciar Cardápio
+    </Link>
+  </div>
+))}
             </div>
           )}
         </div>

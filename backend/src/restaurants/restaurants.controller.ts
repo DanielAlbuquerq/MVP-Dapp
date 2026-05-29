@@ -14,4 +14,8 @@ export class RestaurantsController {
   findAll() {
     return this.restaurantsService.findAll();
   }
+  // @Get(':id')
+  // findOne(@Body() body: { id: string }) {
+  //   return this.restaurantsService.findOne(body.id);
+  // }
 }
