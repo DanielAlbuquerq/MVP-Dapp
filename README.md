@@ -24,13 +24,35 @@ My name is Daniel and this is my first MVP, an "Online Menu" for local markets (
 #### ``Restaurants CRUD:``
 
 COFIGURING THE CONTROLLER:
-- REST configured to creat and list the Restaurants
+- REST configured routes to creat and list the Restaurants, Categories, and Products.
 
-## Web: 
+-
 
+## Frontend
+   ### Web:
+- web page arquitecture (Nest.js + Prisma)   
 
-## Frontend:
-
-- structure the rest of the menu. Based on the relationship defined (Restaurant -> Categories -> Products -> Orders), the next logical step in the backend is to generate the Categories and Products services, ensuring that the products support descriptions and images.
+- Structure the rest of the menu. Based on the relationship defined (Restaurant -> Categories -> Products -> Orders), the next logical step in the backend is to generate the Categories and Products services, ensuring that the products support descriptions and images.
 
 - Build the dashboard where restaurants will register by connecting to the API we just created.
+
+- Create the menu registration form. goal here is to allow the creation of Categories and, within them, Products with descriptions and images.   
+
+### Mobile:
+ - Mobile front arquitecture:  (Expo/React Native)
+
+ - Start by configuring the visual base, the network connection, and creating the application's home screen.
+
+ - Config Tailwind (NativeWind) and Babel
+ - Config Axios on Mobile
+
+
+
+## Errors found and faced:
+- Error Type Console AxiosError ## Error Message Network Error Next.js version: 16.2.6 (Turbopack)   |   node_modules/axios/lib/adapters/xhr.js (124:21)
+```
+I resolved this error by adding 'app.enableCors();' into the 'const app = await NestFactory.create' in main file on Nest.js
+```
+
+-Ponto a ser modificado: Estratégia para Imagens no MVP: Para manter o foco na simplicidade neste momento, deixei o campo de imagem como uma "URL" (link). Isso evita que precisemos configurar servidores complexos de armazenamento de arquivos (como AWS S3) logo de cara. Podemos colar qualquer link de imagem da internet para testar.
+

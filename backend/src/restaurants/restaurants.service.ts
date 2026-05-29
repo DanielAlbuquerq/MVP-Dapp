@@ -16,4 +16,11 @@ export class RestaurantsService {
   async findAll() {
     return this.prisma.restaurant.findMany();
   }
+
+  // async findOne(id: string) {
+  //   return this.prisma.restaurant.findUnique({
+  //     where: { id },
+  //     include: { categories: true }, // Já trazemos as categorias para facilitar o front-end
+  //   });
+  // }
 }
