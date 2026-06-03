@@ -1,0 +1,8 @@
+The Everyday Workflow
+
+- Start the server: Run "npx expo start"
+
+- Open the App: Press a in your terminal to open it directly on your Android Emulator, or scan the QR code using the Expo Go app on your physical device.
+
+- You should strictly use "npx expo run:android" - if You installed a new library that requires you to edit native iOS/Android code - You changed something inside the android/ folder directly - You need to generate a new standalone development build APK on your machine.
+

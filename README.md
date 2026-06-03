@@ -48,10 +48,56 @@ COFIGURING THE CONTROLLER:
 
 
 
-## Errors found and faced:
-- Error Type Console AxiosError ## Error Message Network Error Next.js version: 16.2.6 (Turbopack)   |   node_modules/axios/lib/adapters/xhr.js (124:21)
+# Errors found and faced:
+
+## Frontend Errors
+##### Nativewind setup notes
+If you encounter `Nativewind received no data`, the fix is:
+- Remove `isCSSEnabled: false` from `metro.config.js`
+- Keep `withNativeWind(config, { input: './global.css' })` in `metro.config.js`
+- Ensure `tailwind.config.js` includes `./src/**/*.{js,jsx,ts,tsx}` in `content`
+- Import `global.css` once in the app root (for example in `src/app/_layout.tsx`)
+- Restart Metro with `npx expo start -c`
+- `Make sure you have only one global.css file in the root`
+
+## Backend:
+##### Error Type Console AxiosError ## Error Message Network Error Next.js version: 16.2.6 (Turbopack)   |   node_modules/axios/lib/adapters/xhr.js (124:21)
 ```
-I resolved this error by adding 'app.enableCors();' into the 'const app = await NestFactory.create' in main file on Nest.js
+RESOLUTION: 
+- I resolved this error by adding 'app.enableCors();' into the 'const app = await NestFactory.create' in main file on Nest.js
+```
+##### Expo Erros (Expo go and Expo dev build (EAS)):
+
+```
+RESOLUTION: 
+- I faced an error to sync the expo application to devices phones using wireless connection, I had to config the Expo Go to run correctly on iOs system with limited plugins. 
+```
+
+##### ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH. 
+
+```
+RESOLUTION: 
+- I had to install dependencies: Java SE Development Kit (JDK) and I needed to set up the system paths (Enviroment variable) to recognize the android emulator and expo build drivers.
+
+```
+
+##### 📋 Expo: Overview of the Issues During a local native Android build (npx expo run:android) on Windows
+
+```
+-the build failed due to a combination of two distinct issues:Gradle 9 Compatibility Crash: An outdated Foojay toolchain resolver plugin injected by the underlying framework looked for an obsolete property (JvmVendorSpec.IBM_SEMERU) that was removed in Gradle 9+, crashing the initialization of DistributionsKt.Missing Android SDK Path: After regenerating clean native files, the local build environment on Windows could not locate the Android SDK directory (ANDROID_HOME).
+
+-RESOLUTION: 
+Step 1: Force Generation of Native Android Files - Step 2: Patching the Gradle Toolchain Compatibility
+Step 3: Mapping the Android SDK Location on Windows - Step 4: Cache Purge & Rebuild
+
+```
+
+
+#### Android Bundling failed 9916ms node_modules\expo-router\entry.js (1 module)
+ ERROR  Error: [BABEL] C:\Users\danie\OneDrive\Documents\MVP-Delivery\mobile\node_modules\expo-router\entry.js: .plugins is not a valid Plugin property
+```
+-RESOLUTION: 
+Step 1: I needed to change the babel.config.js file because the pluging array came an old version by default
 ```
 
 -Ponto a ser modificado: Estratégia para Imagens no MVP: Para manter o foco na simplicidade neste momento, deixei o campo de imagem como uma "URL" (link). Isso evita que precisemos configurar servidores complexos de armazenamento de arquivos (como AWS S3) logo de cara. Podemos colar qualquer link de imagem da internet para testar.

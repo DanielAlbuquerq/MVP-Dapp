@@ -1,15 +1,21 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { Stack } from 'expo-router';
+import "../../global.css";
+import { verifyInstallation } from 'nativewind';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+// Verify Nativewind installation early at module load
+verifyInstallation();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function Layout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <Stack>
+      <Stack.Screen
+        name="index" 
+        options={{ title: 'MVP Delivery' }} 
+      />
+      <Stack.Screen 
+        name="restaurant/[id]" 
+        options={{ title: 'Cardápio' }} 
+      />
+    </Stack>
   );
 }
