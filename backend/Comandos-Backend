@@ -1,0 +1,9 @@
+The Everyday Workflow:
+
+- Para testar se tudo deu certo até aqui, basta rodar "npm run start:dev" na pasta backend
+
+- Sempre que você alterar o arquivo schema.prisma (adicionar/remover tabelas ou campos), rode: "npx prisma migrate dev" para atualizar seu banco de dados e gerar a tipagem.
+
+- Para atualizar apenas a tipagem do seu código (sem alterar o banco de dados), use: "npx prisma generate"
+
+- Se você estiver em um ambiente de desenvolvimento local e quiser apenas testar mudanças rapidamente sem criar arquivos de migração históricos, você pode usar o "npx prisma db push"

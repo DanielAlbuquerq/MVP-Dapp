@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { router } from 'expo-router';
 import { api } from '../services/api';
-import "../../global.css"
-import {arrayRestaurants} from '../../../backend/arrayRestaurants.js';
-
 
 interface Restaurant {
   id: string;
@@ -12,25 +8,19 @@ interface Restaurant {
   whatsapp: string;
 }
 
-export default function Home() {
+export default function HomeScreen({ navigation }: any) {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
-    api.get('/restaurants', { timeout: 10000000 })
+    api.get('/restaurants')
       .then(response => {
         setRestaurants(response.data);
         setLoading(false);
       })
-       .catch(error => {
+      .catch(error => {
         console.error("Erro ao buscar restaurantes:", error);
         setLoading(false);
-        if (error.code === 'ECONNABORTED') {
-          alert("A conexão demorou muito. Por favor, tente novamente.");
-        } else {
-          alert("Ocorreu um erro ao carregar os restaurantes. Por favor contate o suporte.");
-        }
       });
   }, []);
 
@@ -41,7 +31,6 @@ export default function Home() {
       </View>
     );
   }
-
 
   return (
     <View className="flex-1 p-5 bg-gray-50">
@@ -55,14 +44,8 @@ export default function Home() {
         renderItem={({ item }) => (
           <TouchableOpacity 
             className="bg-white p-5 rounded-xl mb-4 shadow-sm border border-gray-100"
-            onPress={() => router.push({
-              pathname: "/restaurant/[id]",
-              params: { 
-                id: item.id, 
-                restaurantName: item.name, 
-                whatsapp: item.whatsapp 
-              }
-            })}
+            // A navegação para o menu será implementada na próxima etapa
+            onPress={() => console.log("Navegar para o restaurante", item.name)}
           >
             <Text className="text-lg font-bold text-gray-800">{item.name}</Text>
             <Text className="text-sm text-gray-500 mt-1">Ver cardápio completo</Text>
