@@ -1,27 +1,44 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, SubmitEvent } from 'react';
 import { api } from '../services/api';
 import Link from 'next/link';
+import SkeletonLoader from '../components/SkeletonLoader';
+import { useRouter } from 'next/navigation';
 
 // Tipagem básica para o TypeScript
 interface Restaurant {
   id: string;
   name: string;
   whatsapp: string;
+  imageUrl?: string;
 }
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [name, setName] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
+  const [ownerId, setOwnerId] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState('');
+
+  const router = useRouter();
 
   // COLE AQUI O ID DO USUÁRIO QUE VOCÊ CRIOU NO PRISMA STUDIO
-  const MOCK_OWNER_ID = "123"; 
+  //const MOCK_OWNER_ID = "123"; 
 
   // Busca os restaurantes ao carregar a página
   useEffect(() => {
-    loadRestaurants();
+    // Verifica se o usuário está logado
+    const token = localStorage.getItem('@MVPDelivery:token');
+    const storedUserId = localStorage.getItem('@MVPDelivery:userId');
+    
+    // Se não tiver token, expulsa para a tela de login
+    if (!token || !storedUserId) {
+      router.push('/login');
+    } else {
+      setOwnerId(storedUserId); // Salva o userId para usar no cadastro de restaurantes
+      loadRestaurants();   
+    }
   }, []);
 
   async function loadRestaurants() {
@@ -33,7 +50,7 @@ export default function Home() {
     }
   }
 
-  async function handleCreateRestaurant(e: FormEvent) {
+  async function handleCreateRestaurant(e: SubmitEvent) {
     e.preventDefault();
     try {
       await api.post('/restaurants', {
@@ -50,6 +67,15 @@ export default function Home() {
       alert("Erro ao salvar. Verifique se colou o Owner ID corretamente.");
     }
   }
+
+  function handleLogout() {
+    localStorage.removeItem('@MVPDelivery:token');
+    localStorage.removeItem('@MVPDelivery:userId');
+    router.push('/login');
+  }
+
+  // Evita renderizar a página antes de confirmar o login
+  if (!ownerId) return <SkeletonLoader />;
 
   return (
     <main className="min-h-screen bg-gray-50 p-8 text-gray-900">
@@ -111,6 +137,12 @@ export default function Home() {
             </div>
           )}
         </div>
+  <button 
+    onClick={handleLogout}
+    className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold py-2 px-4 rounded-md transition-colors"
+  >
+    Sair (Logout)
+  </button>
       </div>
     </main>
   );

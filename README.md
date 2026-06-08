@@ -99,6 +99,9 @@ Step 3: Mapping the Android SDK Location on Windows - Step 4: Cache Purge & Rebu
 -RESOLUTION: 
 Step 1: I needed to change the babel.config.js file because the pluging array came an old version by default
 ```
+_____________________________________________
+
+-Interessante: O Next.js pré-carrega (faz prefetch) das páginas dos <Link> que aparecem na tela, deixando a navegação instantânea. Motores de busca (Google) também leem melhor o <Link>.
 
 -Ponto a ser modificado: Estratégia para Imagens no MVP: Para manter o foco na simplicidade neste momento, deixei o campo de imagem como uma "URL" (link). Isso evita que precisemos configurar servidores complexos de armazenamento de arquivos (como AWS S3) logo de cara. Podemos colar qualquer link de imagem da internet para testar.
 

@@ -4,7 +4,7 @@
  */
 
 import { Platform } from 'react-native';
-import "../global.css";
+// import "../global.css";
 
 export const Colors = {
   light: {

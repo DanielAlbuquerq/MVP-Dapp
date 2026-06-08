@@ -1,0 +1,5 @@
+Start dev server: "npm run dev"
+
+Build for production: "npm run build"
+Serve production build: "npm run server"
+Start production server: "npm start"

@@ -19,6 +19,17 @@ datasource db {
 enum Role {
   ADMIN
   RESTAURANT
+  CUSTOMER
+  DRIVER
+}
+
+enum CategoryType {
+  LANCHES
+  BEBIDAS
+  DOCES
+  SALGADOS
+  OUTROS
+  RAPIDAO 
 }
 
 enum OrderStatus {
@@ -38,20 +49,35 @@ model User {
   password  String
   name      String
   role      Role     @default(RESTAURANT)
+
+  // Relação: Um usuário pode ser um cliente (se for do tipo CUSTOMER)
+  customer   Customer? 
   
-  // Relação: Um usuário pode gerenciar um ou mais restaurantes
+  // Relação: Um usuário pode ser dono de restaurante e gerenciar um ou mais restaurantes
   restaurants Restaurant[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model Customer {
+  id String @id @default(uuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id])
+  phone String
+  orders  Order[]
+}
 // Tabela de Restaurantes (Aplicativo com mais de um restaurante disponível)
 model Restaurant {
   id          String   @id @default(uuid())
   name        String
+  logoUrl     String?
+  coverImageUrl String?
+  isOpen      Boolean @default(true)
+  deliveryFee Float @default(0)
   description String?
   whatsapp    String   // Número para onde enviaremos o pedido via WhatsApp
+  minimumOrder Float @default(0)
   
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id])
@@ -66,7 +92,7 @@ model Restaurant {
 // Tabela de Categorias (Ex: "Lanches", "Bebidas")
 model Category {
   id           String     @id @default(uuid())
-  name         String
+  name         CategoryType
   
   restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
@@ -98,8 +124,6 @@ model Product {
 // Tabela de Pedidos (Mesmo enviando pro WhatsApp, é bom registrar no banco para o Admin ter controle)
 model Order {
   id            String      @id @default(uuid())
-  customerName  String
-  customerPhone String
   totalAmount   Float
   status        OrderStatus @default(PENDING)
   
@@ -110,6 +134,9 @@ model Order {
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  customerId    String  
+  customer   Customer       @relation(fields: [customerId], references: [id])
+  
 }
 
 // Tabela de Itens do Pedido (A relação de quais produtos estão em qual pedido)

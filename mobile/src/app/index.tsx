@@ -3,6 +3,8 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react
 import { router } from 'expo-router';
 import { api } from '../services/api';
 import "../../global.css"
+import {arrayRestaurants} from '../../../backend/arrayRestaurants.js';
+
 
 interface Restaurant {
   id: string;
@@ -21,7 +23,7 @@ export default function Home() {
         setRestaurants(response.data);
         setLoading(false);
       })
-      .catch(error => {
+       .catch(error => {
         console.error("Erro ao buscar restaurantes:", error);
         setLoading(false);
         if (error.code === 'ECONNABORTED') {
