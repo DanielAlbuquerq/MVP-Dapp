@@ -16,6 +16,13 @@ export class RestaurantsService {
   async findAll() {
     return this.prisma.restaurant.findMany();
   }
+// Atualiza o estado de aberto/fechado do restaurante
+  async updateStatus(id: string, isOpen: boolean) {
+    return this.prisma.restaurant.update({
+      where: { id },
+      data: { isOpen },
+    });
+  }
 
   // async findOne(id: string) {
   //   return this.prisma.restaurant.findUnique({

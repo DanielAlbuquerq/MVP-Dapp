@@ -7,7 +7,7 @@ import axios from 'axios';
 
 export const api = axios.create({
 //baseURL: 'http://localhost:3000', 
-//baseURL: 'http://192.168.1.37:3000' //Doceria,
+baseURL: 'http://192.168.1.249:3000' //Doceria,
 //baseURL: 'http://192.168.0.66:3000' //Camara,
-baseURL: 'http://192.168.0.9:3000' //Claudio
+//baseURL: 'http://192.168.0.9:3000' //Claudio
 });

@@ -40,7 +40,7 @@ export default function Home() {
       loadRestaurants();   
     }
   }, []);
-
+  
   async function loadRestaurants() {
     try {
       const response = await api.get('/restaurants');
@@ -56,7 +56,7 @@ export default function Home() {
       await api.post('/restaurants', {
         name,
         whatsapp,
-        ownerId: MOCK_OWNER_ID, 
+        ownerId, // Usa o ID do usuário logado ou o mock se não tiver
       });
       
       setName('');
@@ -80,10 +80,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 p-8 text-gray-900">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Painel Admin - MVP Delivery</h1>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Cadastrar Novo Restaurante</h2>
+        <h1 className="text-3xl font-bold mb-8">Painel Admin - MVP Delivery</h1>        
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
+            <h2 className="text-xl font-semibold mb-4">Cadastrar Novo Restaurante</h2>
           <form onSubmit={handleCreateRestaurant} className="flex gap-4 items-end">
             <div className="flex-1">
               <label className="block text-sm font-medium mb-1">Nome do Restaurante</label>
@@ -113,7 +112,6 @@ export default function Home() {
             </button>
           </form>
         </div>
-
         <div>
           <h2 className="text-xl font-semibold mb-4">Restaurantes Cadastrados</h2>
           {restaurants.length === 0 ? (

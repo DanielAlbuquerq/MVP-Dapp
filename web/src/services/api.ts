@@ -12,6 +12,9 @@ api.interceptors.request.use((config) => {
     const token = localStorage.getItem('@MVPDelivery:token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      console.log("Nenhum token encontrado, não adicionando header Authorization");
+      // delete config.headers?.Authorization; // Remove o header se não houver token
     }
   }
   return config;

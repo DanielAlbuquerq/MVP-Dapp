@@ -1,0 +1,57 @@
+No PostgreSQL, adicionar novos valores a um enum 
+operação segura e não altera ou corrompe os dados
+que já estão lá. O Postgres permite expandir o enum 
+sem precisar de um valor padrão imediato, pois os 
+registros antigos continuam válidos com os valores anteriores.
+
+Siga este fluxo exato e seguro para aplicar a alteração:
+
+1. Modifique o schema.prisma
+Adicione os novos valores ao bloco do seu enum.
+
+enum Status {
+  ATIVO
+  INATIVO
+  NOVO_STATUS_A  // Seu novo valor
+  NOVO_STATUS_B  // Seu novo valor
+}
+
+2. Gere a migração SQL
+Execute o comando de migração no terminal. 
+O Prisma vai detectar a mudança e aplicar 
+um comando ALTER TYPE ADD VALUE por baixo dos panos:
+
+Comando:
+npx prisma migrate dev --name adicionar_valores_enum
+
+3. Atualize o Prisma Client
+Gere os novos tipos no seu código para que o TypeScript 
+e o autocomplete reconheçam os novos valores:
+
+Comando:
+npx prisma generate
+
+4. Atualizar registros antigos (Opcional)
+Se a sua regra de negócio exige que os registros antigos migrem 
+imediatamente para um dos novos status, 
+execute um script ou comando SQL.Você pode criar uma migração 
+de dados vazia para rodar isso de forma nativa no banco:
+
+Comando:
+npx prisma migrate dev --create-only --name migrar_dados_antigos
+
+
+Abra o arquivo .sql gerado e adicione a lógica de atualização:
+
+SQL
+-- Exemplo: Atualiza registros antigos com base em uma condição
+UPDATE "SuaTabela" 
+SET "suaColunaEnum" = 'NOVO_STATUS_A' 
+WHERE "suaColunaEnum" = 'INATIVO';
+
+Depois, aplique a migração de dados executando:
+
+Comando:
+npx prisma migrate dev
+
+FIM, PESQUISAR CASO SURJA ERRO OU DÚVIDAS.

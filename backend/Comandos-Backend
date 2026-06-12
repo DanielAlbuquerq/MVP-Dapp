@@ -7,3 +7,6 @@ The Everyday Workflow:
 - Para atualizar apenas a tipagem do seu código (sem alterar o banco de dados), use: "npx prisma generate"
 
 - Se você estiver em um ambiente de desenvolvimento local e quiser apenas testar mudanças rapidamente sem criar arquivos de migração históricos, você pode usar o "npx prisma db push"
+
+- Para abrir o Prisma Studio: 'npx prisma studio'
+

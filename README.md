@@ -60,25 +60,19 @@ If you encounter `Nativewind received no data`, the fix is:
 - Restart Metro with `npx expo start -c`
 - `Make sure you have only one global.css file in the root`
 
-## Backend:
-##### Error Type Console AxiosError ## Error Message Network Error Next.js version: 16.2.6 (Turbopack)   |   node_modules/axios/lib/adapters/xhr.js (124:21)
-```
-RESOLUTION: 
-- I resolved this error by adding 'app.enableCors();' into the 'const app = await NestFactory.create' in main file on Nest.js
-```
-##### Expo Erros (Expo go and Expo dev build (EAS)):
-
-```
-RESOLUTION: 
-- I faced an error to sync the expo application to devices phones using wireless connection, I had to config the Expo Go to run correctly on iOs system with limited plugins. 
-```
-
 ##### ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH. 
 
 ```
 RESOLUTION: 
 - I had to install dependencies: Java SE Development Kit (JDK) and I needed to set up the system paths (Enviroment variable) to recognize the android emulator and expo build drivers.
 
+```
+
+##### Expo Erros (Expo go and Expo dev build (EAS)):
+
+```
+RESOLUTION: 
+- I faced an error to sync the expo application to devices phones using wireless connection, I had to config the Expo Go to run correctly on iOs system with limited plugins. 
 ```
 
 ##### 📋 Expo: Overview of the Issues During a local native Android build (npx expo run:android) on Windows
@@ -92,16 +86,40 @@ Step 3: Mapping the Android SDK Location on Windows - Step 4: Cache Purge & Rebu
 
 ```
 
-
 #### Android Bundling failed 9916ms node_modules\expo-router\entry.js (1 module)
  ERROR  Error: [BABEL] C:\Users\danie\OneDrive\Documents\MVP-Delivery\mobile\node_modules\expo-router\entry.js: .plugins is not a valid Plugin property
 ```
 -RESOLUTION: 
 Step 1: I needed to change the babel.config.js file because the pluging array came an old version by default
 ```
-_____________________________________________
+
+## Backend Erros:
+
+PRISMA:
+No cast exists, the column would be dropped and recreated, which cannot be done since the column is required and there is data in the table.
+```
+-Resolution: 
+1. Add a temporary column: Create a new column with the desired data type (and allow it to be null for now).
+2. Migrate the data: Run an UPDATE statement to copy data from the old column to the new one, using a manual conversion function (like CAST or TO_NUMBER) to handle the logic.
+3. Drop the old column: Now that the data is safe in the temp column, remove the original.
+4. Rename & Constrain: Rename the temporary column to the original name and apply the NOT NULL constraint.
+```
+
+## Web Erros:
+
+##### Error Type Console AxiosError ## Error Message Network Error Next.js version: 16.2.6 (Turbopack)   |   node_modules/axios/lib/adapters/xhr.js (124:21)
+```
+RESOLUTION: 
+- I resolved this error by adding 'app.enableCors();' into the 'const app = await NestFactory.create' in main file on Nest.js
+```
+__________________________________________________
+PONTOS A SEREM OBSERVADOS:
 
 -Interessante: O Next.js pré-carrega (faz prefetch) das páginas dos <Link> que aparecem na tela, deixando a navegação instantânea. Motores de busca (Google) também leem melhor o <Link>.
 
 -Ponto a ser modificado: Estratégia para Imagens no MVP: Para manter o foco na simplicidade neste momento, deixei o campo de imagem como uma "URL" (link). Isso evita que precisemos configurar servidores complexos de armazenamento de arquivos (como AWS S3) logo de cara. Podemos colar qualquer link de imagem da internet para testar.
 
+- URGENTE: 
+- Criar lógica que apenas o Admin e Gerentes da empresa poderá criar os Restaurantes (Role = Restaurant não pode criar).
+
+- Campo de preço não pode aceitar valores altos.
