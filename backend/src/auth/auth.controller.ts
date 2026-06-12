@@ -1,5 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { Role } from 'generated/prisma/client';
+
+
+//import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -11,9 +15,14 @@ export class AuthController {
     return this.authService.login(body.email, body.password);
   }
   
-  // Rota de Cadastro
   @Post('register')
   register(@Body() body: Record<string, string>) {
-    return this.authService.register(body.name, body.email, body.password);
+    return this.authService.register(body.name, body.email, body.password, body.role.toUpperCase() as Role);
   }
+
+  // @Get('user')
+  // findUnique() {
+  //   return this.authService.findUnique();
+  // }
+
 }

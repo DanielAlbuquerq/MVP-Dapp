@@ -11,6 +11,7 @@ interface Product {
   description: string;
   price: number;
   imageUrl?: string;
+  isActive: boolean;
 }
 
 interface Category {
@@ -30,7 +31,17 @@ export default function RestaurantMenuScreen() {
   useEffect(() => {
     api.get(`/categories/restaurant/${id}`)
       .then(response => {
-        setCategories(response.data);
+
+        //Filtra os produtos ativos e remove as categorias que ficarem vazias
+        const activeCategories = response.data
+          .map((category: Category) => ({
+            ...category,
+            products: category.products.filter(product => product.isActive === true)
+          }))
+          .filter((category: Category) => category.products.length > 0);
+
+        //Renderiza no React (na tela)
+        setCategories(activeCategories);
         setLoading(false);
       })
       .catch(error => {
@@ -129,6 +140,7 @@ export default function RestaurantMenuScreen() {
           )}
         />
       )}
+      
       {/* Botão Flutuante do Carrinho */}
       {cart.length > 0 && (
         <TouchableOpacity 

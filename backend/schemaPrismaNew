@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ----------------------------------------------------------------------
+// ENUMS (Tipos fixos)
+// ----------------------------------------------------------------------
+enum Role {
+  ADMIN
+  RESTAURANT
+  CUSTOMER
+  DRIVER
+
+}
+
+enum CategoryType {
+  SAUDAVEL
+  VITAMINA
+  ARABE
+  CARNES
+  ESPETINHO
+  CAFE
+  CAFEDAMANHA
+  SORVETE
+  DOMAR
+  MARMITA
+  PADARIA
+  PASTEL
+  AÇAI
+  JAPONESA
+  ITALIANA
+  BRASILEIRA
+  MEXICANA
+  LANCHES
+  BEBIDAS
+  DOCES
+  SALGADOS
+  PIZZAS
+  SOBREMESAS
+  HAMBURGUER
+  OUTROS
+  RAPIDAO 
+}
+
+enum OrderStatus {
+  RECEIVED
+  PREPARING
+  READY
+  ON_THE_WAY
+  DELIVERED
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+// ----------------------------------------------------------------------
+// MODELS
+// ----------------------------------------------------------------------
+
+// Tabela de Usuários (Para o Admin Page e para os donos de Restaurante)
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(RESTAURANT)
+
+//CPF opcional por enquanto!
+  phone     String @default("0")
+  cpf       String?
+
+  // Relação: Um usuário pode ser um cliente (se for do tipo CUSTOMER)
+  customer   Customer? 
+  
+  // Relação: Um usuário pode ser dono de restaurante e gerenciar um ou mais restaurantes
+  restaurants Restaurant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id String @id @default(uuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id])
+  phone String
+  orders  Order[]
+}
+// Tabela de Restaurantes (Aplicativo com mais de um restaurante disponível)
+model Restaurant {
+  id          String   @id @default(uuid())
+  name        String
+  cnpj        String?   @db.VarChar(255) // Encriptado com AES-256
+  whatsapp    String   // Número para onde enviaremos o pedido via WhatsApp
+  phone       String?
+  address     String?
+
+  logoUrl     String?
+  coverImageUrl String?
+
+  isOpen      Boolean @default(true)
+  deliveryFee Float?  @default(0)
+  description String?
+  minimumOrder Float  @default(0)
+  
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  
+  categories  Category[]
+  orders      Order[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Tabela de Categorias (Ex: "Lanches", "Bebidas")
+model Category {
+  id           String     @id @default(uuid())
+  name         String
+  categoryType   CategoryType @default(OUTROS)
+  
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  
+  products     Product[]
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+// Tabela de Produtos (Com descrição e imagem conforme os requisitos)
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String   
+  imageUrl    String?  
+  price       Float
+  discount    Float?    @default(0)
+  isActive    Boolean  @default(true)
+  
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  
+  orderItems  OrderItem[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Tabela de Pedidos (Mesmo enviando pro WhatsApp, é bom registrar no banco para o Admin ter controle)
+model Order {
+  id            String      @id @default(uuid())
+  totalAmount   Float
+  totalDiscount Float?       @default(0)
+  totalItems    Int
+  status        OrderStatus @default(PENDING)
+  
+  restaurantId  String
+  restaurant    Restaurant  @relation(fields: [restaurantId], references: [id])
+  
+  items         OrderItem[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  customerId    String  
+  customer   Customer       @relation(fields: [customerId], references: [id])
+  
+}
+
+// Tabela de Itens do Pedido (A relação de quais produtos estão em qual pedido)
+model OrderItem {
+  id        String  @id @default(uuid())
+  quantity  Int     @default(1)
+  unitPrice Float
+  
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}

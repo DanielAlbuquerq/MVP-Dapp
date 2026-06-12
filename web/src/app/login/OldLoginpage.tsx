@@ -8,6 +8,7 @@ export default function LoginScreen() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState('customer'); // Padrão para "owner", pode ser "customer" se quiser testar o fluxo de cliente
   const [password, setPassword] = useState('');
   const router = useRouter();
 
@@ -24,12 +25,21 @@ export default function LoginScreen() {
       const response = await api.post(endpoint, payload);
       
       // O backend retorna o access_token e o userId
-      const { access_token, userId } = response.data;
+      const { access_token, userId, userRole } = response.data;
 
+      // Salva o role do usuário para usar no frontend 
+      // (ex: para mostrar opções de menu diferentes para clientes e donos de restaurante)
+      setRole(userRole);
+       
       // Salva os dados de forma segura no navegador
+      try {
       localStorage.setItem('@MVPDelivery:token', access_token);
       localStorage.setItem('@MVPDelivery:userId', userId);
-
+      } catch (storageError) {
+        console.error("Erro ao salvar dados no localStorage", storageError);
+        alert('Erro no LocalStorage. tente limpar os dados do navegador e tente novamente ou ligue para o suporte.');
+        return;
+      }
       // Redireciona para o painel principal
       router.push('/');
     } catch (error) {

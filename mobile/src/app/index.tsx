@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react
 import { router } from 'expo-router';
 import { api } from '../services/api';
 import "../../global.css"
-import {arrayRestaurants} from '../../../backend/arrayRestaurants.js';
+// import {arrayRestaurants} from '../../../backend/arrayRestaurants.js';
 
 
 interface Restaurant {
@@ -20,7 +20,11 @@ export default function Home() {
     
     api.get('/restaurants', { timeout: 10000000 })
       .then(response => {
-        setRestaurants(response.data);
+
+        //Filtra para manter apenas os restaurantes abertos:
+        const openRestaurants = response.data.filter((restaurant: any) => restaurant.isOpen === true);
+
+        setRestaurants(openRestaurants);
         setLoading(false);
       })
        .catch(error => {
@@ -30,6 +34,7 @@ export default function Home() {
           alert("A conexão demorou muito. Por favor, tente novamente.");
         } else {
           alert("Ocorreu um erro ao carregar os restaurantes. Por favor contate o suporte.");
+          //direcionar usuario para outra pagina 
         }
       });
   }, []);
