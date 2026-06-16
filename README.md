@@ -124,3 +124,5 @@ PONTOS A SEREM OBSERVADOS:
 - Criar lógica que apenas o Admin e Gerentes da empresa poderá criar os Restaurantes (Role = Restaurant não pode criar).
 
 - Campo de preço não pode aceitar valores altos.
+
+- pass all feature to Jira
