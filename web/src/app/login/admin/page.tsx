@@ -13,13 +13,17 @@ export default function AdminLogin() {
   async function handleLogin(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
+      console.log('try')
       const response = await api.post('/auth/login', { email, password });
-      
+      console.log('try2')
+
+      console.log('Resposta do login:', response.data); // Log para depuração
       // Verificação extra para garantir que o utilizador é realmente um ADMIN
       if(response.data.userRole !== 'ADMIN') {
         alert('Acesso negado. Este e-mail não pertence a um administrador.');
         return;
       }
+      console.log('Resposta do login:', response.data); // Log para depuração
 
       localStorage.setItem('@MVPDelivery:token', response.data.access_token);
       localStorage.setItem('@MVPDelivery:userId', response.data.userId);
