@@ -1,71 +1,90 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto} from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
-import { Role } from 'generated/prisma/enums';
-// import { Prisma } from '@prisma/client';
-// import { Role } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
-  // // Busca a lista de usuários (pode ser ajustada para retornar apenas o usuário logado)
-  // async findAll() {
-  //   return this.prisma.user.findMany({
-  //     select: {
-  //       id: true,
-  //       name: true,
-  //       email: true,
-  //       role: true
-  //     }
-  //   });
-  // }
+  async register(dto: CreateUserDto) {
+    const normalizedEmail = dto.email.toLowerCase();
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-  // Função de Login com Verificação de Credenciais
-  async login(email: string, pass: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    
-    // Verifica se o usuário existe ou se a senha criptografada confere
-    if (!user || !(await bcrypt.compare(pass, user.password))) {
-      throw new UnauthorizedException('E-mail ou senha incorretos.');
+    try {
+
+        //Trabalhar nisto para evitar que o usuário seja criado sem o hash do refresh token, o que causaria problemas no login
+       const newUser = await this.prisma.user.create({
+        data: {name: dto.name ,email: normalizedEmail, password: hashedPassword },
+        select: { id: true, email: true, name: true, password: true},
+      });
+
+      const tokens = await this.login({
+        email: dto.email,
+        password: dto.password,
+        //Podemos usar o name sem passar pelo o dto,
+        //Pois os dados já devem vir consistentes do banco
+        name: newUser.name
+      });
+
+      return{
+            user: newUser,
+            ...tokens,
+      }
+    } catch (error: any) {
+      if (error.code === 'P2002') throw new ConflictException('DTO: E-mail já cadastrado.');
+      throw error;
     }
-
-    // Gera o token JWT com as informações básicas do usuário
-    const payload = { sub: user.id, email: user.email, role: user.role };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-      userId: user.id,
-      userRole: user.role
-    };
   }
 
-  // Função de Cadastro com Criptografia
-  async register(name: string, email: string, pass: string, role: Role) {
-    // O número 10 é o "salt rounds", define a força da criptografia
-    const hashedPassword = await bcrypt.hash(pass, 10);
-    
-    const user = await this.prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-
-        /////Import role from the front here
-        role, 
-      },
-    });
-    
-    // Já retorna o usuário logado (com token) após o cadastro
-    const payload = { sub: user.id, email: user.email, role: user.role };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-      userId: user.id,
-      userRole: user.role
-    };
+  async getTokens(userId: string, email: string, role: string) {
+    const payload = { sub: userId, email, role };
+    const [accessToken, refreshToken] = await Promise.all([
+      //Uses the Access Secret
+      this.jwtService.signAsync(payload, { secret: this.configService.getOrThrow('JWT_ACCESS_SECRET'), expiresIn: this.configService.getOrThrow('JWT_EXPIRES_IN') }),
+      //Uses the Refresh Secret
+      this.jwtService.signAsync(payload, { secret: this.configService.getOrThrow('JWT_REFRESH_SECRET'), expiresIn: '7d' }),
+    ]);
+    return { access_token: accessToken, refresh_token: refreshToken, userId, role };
   }
 
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    const hash = await bcrypt.hash(refreshToken, 10);
+    await this.prisma.user.update({ where: { id: userId }, data: { hashedRefreshToken: hash } });
+  }
+
+  async login(dto: LoginUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { email: dto.email.toLowerCase() } });
+    if (!user || !(await bcrypt.compare(dto.password, user.password))) {
+      throw new UnauthorizedException('Credenciais inválidas.');
+    }
+    const tokens = await this.getTokens(user.id, user.email, user.role);
+    await this.updateRefreshToken(user.id, tokens.refresh_token);
+    console.log('Tokens gerados no login:', tokens); // Log para depuração
+    return tokens;
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.hashedRefreshToken) throw new UnauthorizedException('Acesso negado.');
+
+    const isMatch = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
+    if (!isMatch) throw new UnauthorizedException('Acesso negado.');
+
+    const tokens = await this.getTokens(user.id, user.email, user.role);
+    await this.updateRefreshToken(user.id, tokens.refresh_token);
+    return tokens;
+  }
+
+  async logout(userId: string) {
+    await this.prisma.user.update({ where: { id: userId }, data: { hashedRefreshToken: null } });
+    return { message: 'Logout realizado com sucesso' };
+  }
 }

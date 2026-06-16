@@ -20,6 +20,7 @@ My name is Daniel and this is my first MVP, an "Online Menu" for local markets (
 
 - After modeling the database and finalizing the migration, I started creating the services and routes for our API so we could begin saving and retrieving data from the database.
 
+- Architecture based on the concept of an Access Token (a quick, short-duration pass) and a Refresh Token (a long-duration pass used to renew the session without disturbing the user).
 
 #### ``Restaurants CRUD:``
 

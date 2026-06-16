@@ -18,11 +18,18 @@ model User {
   phone     String?
   cpf       String?
 
+//Armazena o hash do refresh token de forma segura
+//RefreshToken é um token de longa duração usado para obter novos Access_Tokens sem precisar fazer login novamente
+  hashedRefreshToken String?
+
   role        Role         @default(RESTAURANT)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   customer    Customer?
   restaurants Restaurant[]
+
+//Otimiza a busca no banco ignorando case sensitive
+  @@index([email(ops: raw("text_ops"))])
 }
 
 model Customer {
@@ -92,7 +99,7 @@ model Order {
   totalAmount  Float
   totalDiscount Float?       @default(0)
   totalItems    Int
-  
+
   status       OrderStatus @default(PENDING)
   restaurantId String
   createdAt    DateTime    @default(now())
