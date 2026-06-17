@@ -17,9 +17,8 @@ export default function AdminLogin() {
       const response = await api.post('/auth/login', { email, password });
       console.log('try2')
 
-      console.log('Resposta do login:', response.data); // Log para depuração
       // Verificação extra para garantir que o utilizador é realmente um ADMIN
-      if(response.data.userRole !== 'ADMIN') {
+      if(response.data.role !== 'ADMIN') {
         alert('Acesso negado. Este e-mail não pertence a um administrador.');
         return;
       }
@@ -27,11 +26,12 @@ export default function AdminLogin() {
 
       localStorage.setItem('@MVPDelivery:token', response.data.access_token);
       localStorage.setItem('@MVPDelivery:userId', response.data.userId);
-      localStorage.setItem('@MVPDelivery:role', response.data.userRole); // Guardamos o papel para segurança extra
+      localStorage.setItem('@MVPDelivery:role', response.data.role); // Guardamos o papel para segurança extra
 
       // Redireciona para o painel de controlo geral do sistema
       router.push('/admin'); 
     } catch (error) {
+      
       console.error(error);
       alert('Acesso negado. Verifique o seu e-mail e palavra-passe de administrador.');
     }
