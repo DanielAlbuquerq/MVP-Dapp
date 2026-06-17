@@ -28,8 +28,15 @@ export default function RestaurantLogin() {
   }
 
   return (
-    <main className="min-h-screen bg-yellow-300 flex items-center justify-center p-4 text-gray-900">
-      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md border border-yellow-100">
+    <main 
+      className="min-h-screen absolute flex items-center pb-24 pr-24 justify-center md:justify-end p-4 text-gray-900 relative bg-contain bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/Dpede2.jpg')" }} // Change this to your image file name in the 'public' folder
+    >
+       {/* <img src="../../../public/Dpede2.jpg" alt="Fundo" className="absolute inset-0 w-[120%] h-full object-cover object-center max-w-none" /> */}
+      {/* Overlay to ensure the card stands out from the background */}
+      <div className="absolute inset-0 bg-yellow-500/40"></div>
+
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md border border-yellow-100 relative z-10">
         <div className="flex flex-col items-center mb-8">
           <div className="bg-yellow-100 p-3 rounded-full mb-3">
             <Store className="w-10 h-10 text-yellow-600" />
