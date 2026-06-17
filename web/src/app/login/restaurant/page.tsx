@@ -41,7 +41,7 @@ export default function RestaurantLogin() {
           <div className="bg-yellow-100 p-3 rounded-full mb-3">
             <Store className="w-10 h-10 text-yellow-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Portal do Parceiro</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Portal Restaurante</h1>
           <p className="text-gray-500 text-sm mt-1">Faça login para gerir o seu restaurante</p>
         </div>
         
