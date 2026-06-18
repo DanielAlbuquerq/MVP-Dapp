@@ -93,6 +93,8 @@ Step 3: Mapping the Android SDK Location on Windows - Step 4: Cache Purge & Rebu
 -RESOLUTION: 
 Step 1: I needed to change the babel.config.js file because the pluging array came an old version by default
 ```
+#### Web: Tailwind.
+- Login/Landing Page, HTML / Tailwind Code Structure, Technical Breakdown of Utility Classes, Background Configuration and Responsiveness, Form Positioning (Right Alignment), Future Customizations.
 
 ## Backend Erros:
 

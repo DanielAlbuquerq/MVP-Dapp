@@ -1,5 +1,6 @@
 generator client {
   provider     = "prisma-client"
+  //talvez devemos alterar o output no deploy, para usarmmos o @prisma/client no import do prisma
   output       = "../generated/prisma"
   moduleFormat = "cjs"
 }
@@ -69,6 +70,7 @@ model Restaurant {
 
 model Category {
   id           String       @id @default(uuid())
+  name         String       @default("Outros")
   restaurantId String
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt

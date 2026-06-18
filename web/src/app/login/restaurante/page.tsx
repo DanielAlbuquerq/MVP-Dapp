@@ -17,10 +17,10 @@ export default function RestaurantLogin() {
       
       localStorage.setItem('@MVPDelivery:token', response.data.access_token);
       localStorage.setItem('@MVPDelivery:userId', response.data.userId);
-      localStorage.setItem('@MVPDelivery:role', 'RESTAURANT'); // Guardamos o papel para o portal
+      localStorage.setItem('@MVPDelivery:role', response.data.role); // Guardamos o papel para o portal
 
       // Redireciona para o portal exclusivo do restaurante
-      router.push('/portal'); 
+      router.push('/portalparceiro'); 
     } catch (error) {
       console.error(error);
       alert('Acesso negado. Verifique as credenciais do seu restaurante.');
@@ -41,7 +41,7 @@ export default function RestaurantLogin() {
           <div className="bg-yellow-100 p-3 rounded-full mb-3">
             <Store className="w-10 h-10 text-yellow-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Portal Restaurante</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Portal do Restaurante</h1>
           <p className="text-gray-500 text-sm mt-1">Faça login para gerir o seu restaurante</p>
         </div>
         
@@ -58,7 +58,7 @@ export default function RestaurantLogin() {
           </div>
           
           <div>
-            <label className="block text-sm font-semibold mb-1 text-gray-700">Palavra-passe</label>
+            <label className="block text-sm font-semibold mb-1 text-gray-700">Senha</label>
             <input 
               type="password" 
               value={password}
@@ -70,9 +70,9 @@ export default function RestaurantLogin() {
           
           <button 
             type="submit" 
-            className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-lg transition-colors mt-4 w-full"
+            className="cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-lg transition-colors mt-4 w-full"
           >
-            Aceder ao Meu Restaurante
+            Entrar
           </button>
         </form>
       </div>
