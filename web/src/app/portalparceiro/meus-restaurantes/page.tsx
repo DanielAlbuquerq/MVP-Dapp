@@ -80,7 +80,7 @@ export default function MeusRestaurantes() {
                   <span className={`w-2 h-2 rounded-full ${rest.isOpen ? 'bg-green-600' : 'bg-red-600'}`}></span>
                   {rest.isOpen ? 'Aberto' : 'Fechado'}
                 </span>
-                <span className="text-yellow-600 font-bold text-sm">Gerenciar &rarr;</span>
+                <span className="bg-yellow-200 p-1 border-2 rounded-md hover:bg-yellow-100   text-yellow-600 font-bold text-sm">Gerenciar &rarr;</span>
               </div>
             </div>
           ))}

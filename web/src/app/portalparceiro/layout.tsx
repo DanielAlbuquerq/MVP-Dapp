@@ -1,12 +1,13 @@
 "use client";
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Store, UtensilsCrossed, LogOut, List } from 'lucide-react';
+import { Store, UtensilsCrossed, LogOut, List, Landmark } from 'lucide-react';
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
 
   function handleLogout() {
     localStorage.clear();
@@ -25,9 +26,16 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         
         <nav className="flex-1 p-4 space-y-2">
           {/* Nova rota: Meus Restaurantes */}
+          {/* <Link 
+            href="#portalparceiro" 
+            className={`w-full flex items-center gap-3 hover:bg-yellow-400 px-4 py-3 rounded-lg font-medium transition-colors ${pathname === '/portalparceiro' && 'bg-yellow-500 text-white' } `}
+          >
+            <Landmark className="w-5 h-5" /> Home
+          </Link> */}
+
           <Link 
             href="/portalparceiro/meus-restaurantes" 
-            className="w-full flex items-center gap-3 hover:bg-yellow-700 px-4 py-3 rounded-lg font-medium transition-colors"
+            className={`w-full flex items-center gap-3 hover:bg-yellow-400 px-4 py-3 rounded-lg font-medium transition-colors ${pathname === '/portalparceiro/meus-restaurantes' && 'bg-yellow-500 text-white' } `}
           >
             <List className="w-5 h-5" /> Meus Restaurantes
           </Link>
@@ -37,7 +45,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             href="#minhasvendas" 
             className="w-full flex items-center gap-3 hover:bg-yellow-700 px-4 py-3 rounded-lg font-medium transition-colors"
           >
-            <UtensilsCrossed className="w-5 h-5" /> FIXINGMinhas Vendas
+            <UtensilsCrossed className="w-5 h-5" /> Minhas Vendas
           </Link>
         </nav>
 

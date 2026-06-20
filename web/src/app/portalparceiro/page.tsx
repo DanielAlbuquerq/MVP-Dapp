@@ -35,6 +35,7 @@ useEffect(() => {
     if ((role !== 'RESTAURANT' && role !== 'ADMIN') || !userId) {
       router.push('/login/restaurante');
     } else {
+      
       loadMyRestaurant(userId);
     }
   }, [searchParams]); // Re-executa se a URL mudar
@@ -91,7 +92,16 @@ useEffect(() => {
     }
   }
 
-  if (loading) return <div className="p-8">A carregar o seu cardápio...</div>;
+  if (loading){
+    return ( 
+      <div className='self-center pt-20'>
+      <h1 className='p-3'>A carregar os Restaurantes e Cardápio...</h1>
+      <div className="flex items-center self-center justify-center">
+      <div className="w-15 h-15 border-8 border-yellow-600 border-t-yellow-200 rounded-full animate-spin"></div>
+      </div>
+      </div>
+    )
+  }  
 
   if (!restaurant && !loading) return (
     <div className="flex flex-col items-center justify-center p-8 mt-20">
@@ -103,6 +113,9 @@ useEffect(() => {
     <>
       <header className="bg-white shadow-sm border-b border-gray-200 px-8 py-6 flex justify-between items-center sticky top-0 z-10">
         <div>
+            {restaurant.logoUrl && (
+                      <img src={restaurant.logoUrl} alt={restaurant.name} className="w-50 h-30 object-cover rounded-md" />
+            )}
           <h2 className="text-2xl font-bold text-gray-800">{restaurant.name}</h2>
           <div className="flex items-center gap-2 mt-1">
             <span className={`w-4 h-4 rounded-full ${restaurant.isOpen ? 'bg-green-500' : 'bg-red-500'}`}></span>
@@ -133,23 +146,24 @@ useEffect(() => {
               <h3 className="font-bold text-lg border-b border-gray-300 pb-2 mb-4">
                 {category.name} <span className="text-sm font-normal text-gray-400">[{category.categoryType}]</span>
               </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 sm-grind-cols-1 gap-4">
               {category.products.map(product => (
-                <div key={product.id} className={`bg-white p-4 rounded-xl shadow-sm border transition-colors flex justify-between items-center ${product.isActive ? 'border-green-300' : 'border-red-500 bg-red-500/30 opacity-75'}`}>
+                <div key={product.id} className={`p-4 rounded-xl shadow-sm border transition-colors flex justify-around items-center ${product.isActive ? 'bg-green-300/10 border-green-300' : 'border-red-500 bg-red-400/10'}`}>
                    {product.imageUrl && (
-                      <img src={product.imageUrl} alt={product.name} className="w-20 h-20 object-cover rounded-md" />
+                      <img src={product.imageUrl} alt={product.name} className="w-20 pr-1 h-20 object-cover rounded-md"/>
                     )}
                   <div>
-                    <h6 className="text-gray-400">id: ({product.id.slice(0, 3)})</h6> 
                     <h4 className={`font-bold ${product.isActive ? 'text-gray-900' : 'text-gray-500 line-through'}`}>                      
                         {product.name}</h4>
                     {/* Ajudar tipagem de preço depois para não aceitar valores alto */}
                     <p className="text-green-600 font-bold mt-1">R$ {product.price.toFixed(2)}</p>
+                    <h6 className="text-gray-400">id: ({product.id.slice(0, 3)})</h6> 
+
                   </div>
                   
                   <button 
                     onClick={() => toggleProductStatus(product.id, product.isActive)}
-                    className={`px-4 cursor-pointer py-2 rounded-lg font-semibold text-sm transition-colors ${product.isActive ? 'bg-gray-100 hover:bg-red-200 text-gray-700' : 'bg-yellow-400 hover:bg-green-300 hover:opacity-90 text-black-700'}`}
+                    className={`px-4  self-end cursor-pointer py-2 rounded-lg font-semibold text-sm transition-colors ${product.isActive ? 'bg-gray-100 hover:bg-red-200 text-gray-700' : 'bg-yellow-400/40 hover:bg-green-500/70 hover:opacity-90 text-black-700'}`}
                   >
                     {product.isActive ? 'Desativar' : 'Reativar'}
                   </button>

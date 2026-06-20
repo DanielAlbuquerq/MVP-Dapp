@@ -17,4 +17,20 @@ export class ProductsService {
       data: { isActive },
     });
   }
+
+  // Atualiza os dados gerais do produto
+  async update(id: string, data: any) {
+    return this.prisma.product.update({
+      where: { id },
+      data,
+    });
+  }
+
+  // Apaga o produto do banco de dados
+  async remove(id: string) {
+    return this.prisma.product.delete({
+      where: { id },
+    });
+  }
+
 }

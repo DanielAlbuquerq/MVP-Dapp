@@ -34,7 +34,7 @@ export default function Home() {
     
     // Se não tiver token, expulsa para a tela de login
     if (!token || !storedUserId) {
-      router.push('/login');
+      router.push('/login/restaurante');
     } else {
       setOwnerId(storedUserId); // Salva o userId para usar no cadastro de restaurantes
       loadRestaurants();   

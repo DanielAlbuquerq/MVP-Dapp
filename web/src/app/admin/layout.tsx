@@ -25,7 +25,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen flex bg-slate-50 text-slate-900">
       {/* SIDEBAR ADMIN */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col shadow-xl hidden md:flex">
+      <aside className="w-30% bg-slate-900 text-white flex flex-col shadow-xl hidden md:flex">
         <div className="p-6 border-b border-slate-800 flex items-center gap-3">
           <ShieldCheck className="w-8 h-8 text-blue-400" />
           <h1 className="text-xl font-bold tracking-tight">Admin System</h1>
@@ -33,7 +33,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav className="flex-1 p-4 space-y-2">
           <Link 
             href="/admin/newuser"
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname === '/admin/new' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname === '/admin/newuser  ' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}
           >
             <Plus className="w-5 h-5" /> Novo Parceiro
           </Link>
@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* ÁREA PRINCIPAL */}
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+      <main className="flex-1 pr-40 flex flex-col h-screen overflow-y-auto">
         {children}
       </main>
     </div>
