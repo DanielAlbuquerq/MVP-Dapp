@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import { UsePipes, ValidationPipe, Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('restaurants')
 export class RestaurantsController {
   constructor(private readonly restaurantsService: RestaurantsService) {}
+
+  // @Post('register-full')
+  // createFull(@Body() body: CreateFullRegistrationDto) {
+  //   return this.restaurantsService.createFullRegistration(body);
+  // }
 
   @Post('register-full')
   createFull(@Body() body: any) {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '../../services/api';
-import { Power, Tag } from 'lucide-react';
+import { ImageIcon, Power, Tag } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -26,6 +26,7 @@ export default function PartnerMenu() {
   const [restaurant, setRestaurant] = useState<any>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  // const [products, setProducts] = useState<Product[]>([]);
 
 useEffect(() => {
     const role = localStorage.getItem('@MVPDelivery:role');
@@ -61,7 +62,8 @@ useEffect(() => {
       console.error(error);
     }
   }
-
+  
+  //This function is loaded in UseEffect
   async function loadCategories(restaurantId: string) {
     try {
       const response = await api.get(`/categories/restaurant/${restaurantId}`);
@@ -85,7 +87,7 @@ useEffect(() => {
 
   async function toggleProductStatus(productId: string, currentStatus: boolean) {
     try {
-      await api.patch(`/products/${productId}/status`, { isActive: !currentStatus });
+      await api.patch(`/products/${productId}`, { isActive: !currentStatus });
       loadCategories(restaurant.id);
     } catch (error) {
       console.error("Erro ao atualizar produto", error);
@@ -146,24 +148,28 @@ useEffect(() => {
               <h3 className="font-bold text-lg border-b border-gray-300 pb-2 mb-4">
                 {category.name} <span className="text-sm font-normal text-gray-400">[{category.categoryType}]</span>
               </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 sm-grind-cols-1 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 sm-grind-cols-1 gap-4">
               {category.products.map(product => (
-                <div key={product.id} className={`p-4 rounded-xl shadow-sm border transition-colors flex justify-around items-center ${product.isActive ? 'bg-green-300/10 border-green-300' : 'border-red-500 bg-red-400/10'}`}>
-                   {product.imageUrl && (
-                      <img src={product.imageUrl} alt={product.name} className="w-20 pr-1 h-20 object-cover rounded-md"/>
+                <div key={product.id} className={`p-4 rounded-xl shadow-sm border transition-colors flex-col justify-items-center md:flex  md:justify-self-center items-center ${product.isActive ? 'bg-green-300/10 border-green-300' : 'border-red-500 bg-red-400/10'}`}>
+                   {product.imageUrl ? (
+                      <img src={product.imageUrl} alt={product.name} className="max-w-20 pr-1 h-20 object-cover rounded-md"/>
+                    ) : (                        
+                    <div className="w-20 h-20 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
+                          <ImageIcon className="w-8 h-8" />
+                    </div>
                     )}
-                  <div>
-                    <h4 className={`font-bold ${product.isActive ? 'text-gray-900' : 'text-gray-500 line-through'}`}>                      
+                  <div className="">
+                      <h4 className={`font-bold ${product.isActive ? 'text-gray-900' : 'text-gray-500 line-through'}`}>                      
                         {product.name}</h4>
                     {/* Ajudar tipagem de preço depois para não aceitar valores alto */}
                     <p className="text-green-600 font-bold mt-1">R$ {product.price.toFixed(2)}</p>
+                    <span className={`text-[10px] ${!product.isActive ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'} px-2 py-0.5 rounded-full font-bold`}> {!product.isActive ? 'Pausado' : 'Ativo' }</span>
                     <h6 className="text-gray-400">id: ({product.id.slice(0, 3)})</h6> 
-
                   </div>
                   
                   <button 
                     onClick={() => toggleProductStatus(product.id, product.isActive)}
-                    className={`px-4  self-end cursor-pointer py-2 rounded-lg font-semibold text-sm transition-colors ${product.isActive ? 'bg-gray-100 hover:bg-red-200 text-gray-700' : 'bg-yellow-400/40 hover:bg-green-500/70 hover:opacity-90 text-black-700'}`}
+                    className={`px-4 self-end cursor-pointer py-2 rounded-lg font-semibold text-sm transition-colors ${product.isActive ? 'bg-gray-100 hover:bg-red-200 text-gray-700' : 'bg-yellow-400/40 hover:bg-green-500/70 hover:opacity-90 text-black-700'}`}
                   >
                     {product.isActive ? 'Desativar' : 'Reativar'}
                   </button>

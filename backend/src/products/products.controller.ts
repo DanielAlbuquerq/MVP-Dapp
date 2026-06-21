@@ -1,23 +1,31 @@
-import { Controller, Patch, Param, Post, Body, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import type { Express } from 'express';
+import 'multer';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() body: { name: string; description: string; price: number; imageUrl?: string; categoryId: string }) {
-    return this.productsService.create(body);
-  }
-
-  @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body('isActive') isActive: boolean) {
-    return this.productsService.updateStatus(id, isActive);
+  @UseInterceptors(FileInterceptor('file'))
+  create(
+    @Body() body: any,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    // O NestJS separa automaticamente: 'body' tem os textos, 'file' tem a imagem
+    return this.productsService.create(body, file);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: any) {
-    return this.productsService.update(id, body);
+  @UseInterceptors(FileInterceptor('file'))
+  update(
+    @Param('id') id: string, 
+    @Body() body: any,
+    @UploadedFile() file?: Express.Multer.File // Opcional, pois na edição o usuário pode não trocar a foto
+  ) {
+    return this.productsService.update(id, body, file);
   }
 
   @Delete(':id')

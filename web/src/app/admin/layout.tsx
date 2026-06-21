@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* ÁREA PRINCIPAL */}
-      <main className="flex-1 pr-40 flex flex-col h-screen overflow-y-auto">
+      <main className="flex-1 pr-20 flex flex-col h-screen overflow-y-auto">
         {children}
       </main>
     </div>
