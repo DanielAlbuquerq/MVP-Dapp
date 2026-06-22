@@ -266,6 +266,7 @@ export default function RestaurantMenu({ params }: { params: Promise<{ id: strin
                         </div>
                         <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
                         <p className="text-green-600 font-semibold mt-1">R$ {product.price.toFixed(2)}</p>
+                        <p className="text-gray-400">id: ({product.id.slice(0, 3)})</p> 
                       </div>
                     </div>
 

@@ -94,6 +94,8 @@ useEffect(() => {
     }
   }
 
+  //Páginas começa abaixo
+
   if (loading){
     return ( 
       <div className='self-center pt-20'>
@@ -150,7 +152,7 @@ useEffect(() => {
               </h3>
             <div className="grid grid-cols-1 md:grid-cols-4 sm-grind-cols-1 gap-4">
               {category.products.map(product => (
-                <div key={product.id} className={`p-4 rounded-xl shadow-sm border transition-colors flex-col justify-items-center md:flex  md:justify-self-center items-center ${product.isActive ? 'bg-green-300/10 border-green-300' : 'border-red-500 bg-red-400/10'}`}>
+                <div key={product.id} className={`p-4 rounded-xl shadow-xl border transition-colors flex-col justify-items-center md:flex  md:justify-self-center items-center ${product.isActive ? 'bg-green-300/10 border-green-300' : 'border-red-500 bg-red-400/10'}`}>
                    {product.imageUrl ? (
                       <img src={product.imageUrl} alt={product.name} className="max-w-20 pr-1 h-20 object-cover rounded-md"/>
                     ) : (                        

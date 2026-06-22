@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Store, UtensilsCrossed, LogOut, List, Landmark } from 'lucide-react';
+import Image from 'next/image';
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -19,11 +20,19 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
       
       {/* SIDEBAR PARCEIRO FIXA */}
       <aside className="w-64 bg-yellow-600 text-white flex flex-col shadow-xl hidden md:flex sticky top-0 h-screen">
-        <div className="p-6 border-b border-yellow-500 flex items-center gap-3">
+        <div className='bg-yellow-700 justify-items-center'>
+        <Image src= "/Oficial Logo.png" 
+          width={150} 
+          height={70} 
+          alt='Dpedo Logo'
+          className="w-auto h-auto" 
+           priority // Eliminar o aviso e otimizar o LCP
+        />
+        <div className="p-3 border-b border-yellow-500 flex justify-center items-center gap-3">
           <Store className="w-8 h-8" />
           <h1 className="text-xl font-bold tracking-tight">Portal Parceiro</h1>
         </div>
-        
+        </div>
         <nav className="flex-1 p-4 space-y-2">
           {/* Nova rota: Meus Restaurantes */}
           {/* <Link 

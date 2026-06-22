@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../services/api';
-import { Power, LogOut } from 'lucide-react';
+import { Power, LogOut, AlertTriangle, X } from 'lucide-react';
 import Link from 'next/link';
 
 interface Restaurant {
@@ -42,6 +42,22 @@ export default function AdminRestaurants() {
     }
   }
 
+  //Função para o Botão de Emergência
+  async function handleEmergencyClose() {
+    const confirm = window.confirm("ATENÇÃO: Tem a certeza que deseja FECHAR TODAS AS LOJAS? Esta ação irá interromper a receção de novos pedidos em toda a plataforma.");
+    
+    if (!confirm) return;
+
+    try {
+      await api.patch('/restaurants/close-all');
+      alert("Operação bem-sucedida: Todas as lojas foram fechadas.");
+      loadRestaurants(); // Recarrega a lista para atualizar os status visuais para OFFLINE
+    } catch (error) {
+      console.error("Erro ao fechar todas as lojas", error);
+      alert("Ocorreu um erro ao tentar executar a operação de emergência.");
+    }
+  }
+
   function handleLogout() {
     localStorage.clear();
     router.push('/login/admin');
@@ -54,9 +70,23 @@ export default function AdminRestaurants() {
           <h2 className="text-2xl font-bold text-slate-800">Lojas Cadastradas</h2>
           <p className="text-sm text-slate-500 mt-1">Gerencie os parceiros e lojas registadas no sistema.</p>
         </div>
-        <button onClick={handleLogout} className="md:hidden p-2 text-slate-500 hover:text-red-600">
-          <LogOut className="w-6 h-6" />
-        </button>
+
+          {/* Agrupamento dos botões do Header */}
+          <div className="flex items-center gap-4">
+            {/* BOTÃO DE EMERGÊNCIA (Apenas visível em ecrãs médios/grandes para evitar cliques errados no telemóvel) */}
+            <button 
+              onClick={handleEmergencyClose} 
+              className="hidden cursor-pointer md:flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 font-bold rounded-lg border border-red-200 hover:bg-red-600 hover:text-white transition-colors shadow-sm"
+              title="Fechar todas as lojas imediatamente"
+            >
+            <AlertTriangle className="w-5 h-5" />
+            Emergência: Fechar Todas
+            </button>
+          
+            <button onClick={handleLogout} className="md:hidden p-2 text-slate-500 hover:text-red-600">
+            <LogOut className="w-6 h-6" />
+         </button>
+        </div>
       </header>
 
       <div className="p-8 max-w-7xl w-full mx-auto space-y-8">
@@ -79,7 +109,7 @@ export default function AdminRestaurants() {
                     href={`/admin/restaurante/${rest.id}`}
                     className="p-2 text-sm font-semibold rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
                   >
-                    Cardápio
+                    Entrar
                   </Link>
 
                   <button onClick={() => toggleRestaurantStatus(rest.id, rest.isOpen)} className={`p-2 cursor-pointer rounded-lg transition-colors ${rest.isOpen ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`}>

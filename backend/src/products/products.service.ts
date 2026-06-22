@@ -34,10 +34,14 @@ export class ProductsService {
       ACL: 'public-read', // Permite que a imagem seja vista por qualquer pessoa no App
     });
 
-    await this.s3Client.send(command); //Ativar ou Destivar quando estiver com conta AWS
+    // ATENÇÃO: Descomente a linha abaixo quando tiver as chaves da AWS reais no .env
+    //await this.s3Client.send(command); //Ativar ou Destivar quando estiver com conta AWS
 
     // Retorna a URL pública montada
-    return `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`;
+    //return `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`;
+
+   // Retornando uma URL fake provisória para você testar localmente sem travar
+    return `https://fake-s3-url.com/${fileName}`;
   }
 
   async create(data: any, file?: Express.Multer.File) {
@@ -73,7 +77,13 @@ export class ProductsService {
         name: data.name,
         description: data.description,
         price: data.price ? parseFloat(data.price) : undefined,
-        isActive: data.isActive === 'true', // FormData envia boolean como string ('true' ou 'false')
+        
+      
+        // Verifica se foi enviado. Se sim, converte para String e compara. 
+        // Isso faz com que boolean (true) e string ('true') funcionem perfeitamente!
+        isActive: data.isActive !== undefined ? String(data.isActive) === 'true' : undefined,
+
+        // isActive: data.isActive === 'true' || true ? 'true' : 'false', // FormData envia boolean como string ('true' ou 'false')
         imageUrl: imageUrl,
       },
     });
