@@ -33,6 +33,11 @@ export class RestaurantsController {
     return this.restaurantsService.findAll();
   }
 
+  @Get(':id/orders')
+  getOrders(@Param('id') id: string) {
+    return this.restaurantsService.getRestaurantOrders(id);
+  } 
+
   //Rota de Emergência (DEVE FICAR ACIMA DA ROTA COM :id)
   @Patch('close-all')
   closeAll() {
