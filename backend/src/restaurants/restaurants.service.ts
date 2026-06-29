@@ -129,4 +129,16 @@ export class RestaurantsService {
       data: { isOpen: false },
     });
   }
+
+  //Busca os pedidos de um restaurante específico
+  async getRestaurantOrders(restaurantId: string) {
+    return this.prisma.order.findMany({
+      where: { restaurantId },
+      include: {
+        customer: { select: { phone: true, user: { select: { name: true } } } },
+        items: { include: { product: { select: { name: true, price: true } } } }
+      },
+      orderBy: { createdAt: 'desc' } // Traz os pedidos mais recentes primeiro
+    });
+  }
 }

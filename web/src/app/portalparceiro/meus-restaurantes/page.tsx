@@ -39,9 +39,11 @@ export default function MeusRestaurantes() {
     }
   }
 
-  // Ao clicar num restaurante, joga o ID na URL para a tela de cardápio ler
+// Ao clicar num restaurante, abre o Gestor de Pedidos numa nova guia
   function handleSelectRestaurant(id: string) {
-    router.push(`/portalparceiro?restaurantId=${id}`);
+    // URL APONTANDO PARA O GESTOR DE PEDIDOS
+    const url = `/portalparceiro/ordermanager?restaurantId=${id}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   if (loading) return <div className="p-8">A carregar os seus restaurantes...</div>;

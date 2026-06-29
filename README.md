@@ -15,6 +15,22 @@ My name is Daniel and this is my first MVP, an "Online Menu" for local markets (
 - 📂 `Web/` (Next.js, Tailwind, for Admin/Restaurant management panel)  
 - 📂 `Mobile/` (React Native, Expo, for client app)  
 
+
+## AWS Cloud:
+   - AWS EC2: (Invalid Parameters "${env:USERNAME}:(R)") I faced an error to connect my local machine to my instance
+   on AWS EC2 using .pem, I followed these commands and it worked: 
+      #### 1. Disables permission inheritance on the file
+      icacls.exe .\mvp-key.pem /inheritance:r
+
+      #### 2. Grants read-only permission to your current Windows user
+      icacls.exe .\mvp-key.pem /grant:r "${env:USERNAME}:(R)"
+
+      #### 3. Removes permissions for the Administrators group (if present)
+      icacls.exe .\mvp-key.pem /remove "Administrators"
+
+      #### 4. Removes permissions for the System group (if present)
+      icacls.exe .\mvp-key.pem /remove "SYSTEM"
+
 ## Backend:   
 - I started by modeling the database, defining how all our information will flow between the backend, the web, and the mobile app.
 
