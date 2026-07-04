@@ -19,6 +19,6 @@ async function bootstrap() {
   // Habilita CORS para o nosso front-end conseguir fazer requisições
   app.enableCors();
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 bootstrap();
