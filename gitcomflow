@@ -1,0 +1,25 @@
+1. Busque as atualizações mais recentes antes de comparar,
+você precisa avisar o seu Git para baixar as informações 
+mais recentes do GitHub (sem alterar o seu código atual):
+
+Comando:
+git fetch
+
+---
+
+2. Veja a diferença exata (Seu computador vs. GitHub)
+
+Comando:
+git diff main origin/main
+
+---
+
+3. Verifique o status geral
+O comando mais prático para confirmar se tudo está atualizado
+ou se há arquivos pendentes é o git status
+
+Comando:
+git status
+
+---
+
