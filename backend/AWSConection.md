@@ -1,3 +1,7 @@
+Abra o site AWS, vá até EC2, abrir instâncias, click na instância desejada, procure pelo botão conectar, role a tela para baixo e procure por Exemplo: 'ssh -i "mvp-key.pem" ec2-user@ec2-18-221-63-185.us-east-2.compute.amazonaws.com'
+-Conecte-se à sua instância usando sua DNS pública (procure pelo id 'DNS pública'):
+
+
 powershell -Command "New-Item -Path . -Name 'AWS_CONEXAO_GUIDE.md' -ItemType 'File' -Value (@'
 # 📝 Documentação de Conectividade: AWS RDS & AWS EC2 no Windows
 

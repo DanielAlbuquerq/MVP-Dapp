@@ -10,3 +10,23 @@ The Everyday Workflow:
 
 - Para abrir o Prisma Studio: 'npx prisma studio'
 
+
+____________
+
+PRODUÇÃO:
+
+Commandos pm2:::
+
+- pm2 status > Mostra a lista de processos 
+- pm2 monit > Abre um painel interativo no terminal em tempo real 
+- pm2 logs > Mostra em tempo real tudo o que está sendo processado
+- pm2 start dist/main.js --name "backend-api" > This boots up your compiled Node.js application (usually found in your dist/ folder) and assigns it the recognizable name backend-api in your PM2 process list.
+- pm2 save > This takes a snapshot of all currently running PM2 processes and saves them to a configuration file on your server.
+- pm2 startup > This detects your server's operating system (e.g., Ubuntu, CentOS) and generates a specific command to register PM2 as a system service.
+- pm2 restart backend-api > avisa que o código foi atualizado e que ele precisa de reiniciar a API (confirme o nome do seu serviço, aqui nomeamos como 'backend-api' no inicio da configuração)
+
+ALTERAR ARQUIVOS DENTRO DO 'AWS EC2':
+
+- nano src/main.ts > Abre o ficheiro com o editor de texto do terminal
+
+----
