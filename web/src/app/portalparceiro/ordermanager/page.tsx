@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense} from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '../../../services/api';
 import { ChefHat, CheckCircle, Clock, Motorbike } from 'lucide-react';
@@ -14,13 +14,12 @@ interface Order {
   items: { quantity: number, product: { name: string } }[];
 }
 
-export default function OrderManager() {
+function OrderManagerContent() {
   const router = useRouter()
   const searchParams = useSearchParams();
   const restaurantId = searchParams.get('restaurantId');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     // Adicionei o user Id mas não tinha antes,
@@ -98,5 +97,14 @@ export default function OrderManager() {
         </div>
       )}
     </main>
+  );
+}
+
+// 2. Novo export default no final do arquivo que envelopa o conteúdo com o Suspense!
+export default function OrderManager() {
+  return (
+    <Suspense fallback={<div className="p-8 font-bold text-gray-600">A carregar interface...</div>}>
+      <OrderManagerContent />
+    </Suspense>
   );
 }

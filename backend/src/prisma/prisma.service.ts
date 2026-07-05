@@ -9,7 +9,7 @@ import 'dotenv/config';
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor() {
     // 1. Set up the native pg Pool
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const pool = new Pool({ connectionString: process.env.TESTDATABASE_URL });
 
     // 2. Wrap it in Prisma's driver adapter and pass to super()
     super({
