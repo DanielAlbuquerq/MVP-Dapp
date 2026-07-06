@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '../../services/api';
 import { ImageIcon, Power, Tag } from 'lucide-react';
@@ -20,9 +20,11 @@ interface Category {
   products: Product[];
 }
 
-export default function PartnerMenu() {
+function PartnerMenuContent() {
+
   const router = useRouter();
   const searchParams = useSearchParams();
+  
   const [restaurant, setRestaurant] = useState<any>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,6 +42,7 @@ useEffect(() => {
       loadMyRestaurant(userId);
     }
   }, [searchParams]); // Re-executa se a URL mudar
+
 
   async function loadMyRestaurant(userId: string) {
     try {
@@ -182,5 +185,21 @@ useEffect(() => {
         ))}
       </div>
     </>
+  );
+}
+
+// 2. Componente de exportação padrão encapsulando o conteúdo no Suspense
+export default function PartnerMenu() {
+  return (
+    <Suspense fallback={
+      <div className='self-center pt-20'>
+        <h1 className='p-3 text-center'>A carregar os Restaurantes e Cardápio...</h1>
+        <div className="flex items-center self-center justify-center">
+          <div className="w-15 h-15 border-8 border-yellow-600 border-t-yellow-200 rounded-full animate-spin"></div>
+        </div>
+      </div>
+    }>
+      <PartnerMenuContent />
+    </Suspense>
   );
 }
