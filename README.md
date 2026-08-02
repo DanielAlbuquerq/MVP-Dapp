@@ -9,6 +9,15 @@ Daniel Mendes de Albuquerque
 My name is Daniel and this is my first MVP, an "Online Menu" for local markets (restaurants) in small towns.
 ```
 
+### Navigation: 
+```
+Restaurant:
+https://www.dpede.com.br/login/restaurante   
+https://www.dpede.com.br/portalparceiro
+```
+
+
+
 ## 🛠 Overview of Current Architecture
 
 - 📂 `Backend/` (Nest.js, Prisma, to conect to Postgres)  
