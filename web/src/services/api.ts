@@ -6,7 +6,10 @@ export const api = axios.create({
   //baseURL: 'http://localhost:3000',
 
   //IP público do servidor EC2 da AWS
-  baseURL: 'http://18.221.63.185:3000',
+  //baseURL: 'http://18.221.63.185:3000',
+
+  //IP registroBR (com o Nginx redirecionando para a porta 3000)
+  baseURL: 'https://api.dpede.com.br'
 });
 
 // Interceptador: antes de qualquer requisição sair do front, ele executa isso:
