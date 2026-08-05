@@ -12,7 +12,7 @@ export default function Layout() {
       <Stack>
         <Stack.Screen
           name="index" 
-          options={{ title: 'MVP Delivery' }} 
+          options={{ title: 'DPede' }} 
         />
         <Stack.Screen 
           name="restaurant/[id]" 

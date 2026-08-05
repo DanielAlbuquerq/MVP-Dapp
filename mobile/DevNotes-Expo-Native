@@ -1,0 +1,7 @@
+1. Use React Native Docs For Layout and Core UIYou must use the official React Native Documentation for your foundational building blocks.Layout: <View>, <ScrollView>, <SafeAreaView>Text & Data: <Text>, <FlatList>User Input: <TextInput>, <Pressable>
+
+2. Use Expo Docs For Native Device FeaturesYou must use the official Expo Documentation when you need to access specific phone hardware or advanced system APIs.Hardware: Camera, Biometrics (FaceID/TouchID), Gyroscope, AudioSystem Services: Push Notifications, Secure Store (encrypted storage), File SystemApp Structure: File-based Routing (expo-router)
+
+A Simple Rule of Thumb 
+If you are building the visual structure of your screen, check React Native docs.
+If you are connecting to phone features or configuring the app environment, check Expo docs.

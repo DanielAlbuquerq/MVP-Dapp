@@ -9,7 +9,7 @@ export const api = axios.create({
   //baseURL: 'http://18.221.63.185:3000',
 
   //IP registroBR (com o Nginx redirecionando para a porta 3000)
-  baseURL: 'https://api.dpede.com.br'
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
 
 // Interceptador: antes de qualquer requisição sair do front, ele executa isso:
